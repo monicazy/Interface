@@ -18,4 +18,4 @@ with open(test_report_path, "wb") as file:
     runner.run(suite)
 
 # 生成测试报告后发送给指定收件人
-SendEmail().send_email("3097944154@qq.com", test_report_path)
+# SendEmail().send_email("3097944154@qq.com", test_report_path)
