@@ -5,6 +5,7 @@
 # @File  : http_request.py
 
 import requests
+import json
 from tools.my_log import MyLog
 
 
@@ -13,11 +14,11 @@ class HttpRequests:
         try:
             res = None
             if method == "get":
-                res = requests.get(url, data, cookies=cookie)
+                res = requests.get(url, params=data, cookies=cookie)
             elif method == "post":
-                res = requests.post(url, data, cookies=cookie)
+                res = requests.post(url, json=data, cookies=cookie)
             elif method == "put":
-                res = requests.put(url, data, cookies=cookie,)
+                res = requests.put(url, json=data, cookies=cookie,)
             elif method == "delete":
                 res = requests.delete(url, cookies=cookie)
             return res

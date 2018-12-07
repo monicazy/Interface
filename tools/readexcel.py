@@ -10,6 +10,7 @@ import pandas as pd
 from tools.get_data import GetData
 from tools.do_regx import DoRegx
 
+
 class ReadExcel:
     def __init__(self):
         self.file_name = project_path.test_case_path
@@ -26,9 +27,11 @@ class ReadExcel:
             for i in df.index.values:  # 获取行号的索引，并对其进行遍历：
                 if sheet_name_sub[sheet_name[n]] == "all":  # 如果value等于all就全部遍历添加
                     row_data = df.loc[df.index[i],
-                                      ['id', "module", "title", "url", "data", "check_sql", "method", "ExpectedResult"]].to_dict()
+                                      ['id', "module", "title", "url", "data", "check_sql", "method",
+                                       "ExpectedResult"]].to_dict()
                     row_data["sheet_name"] = sheet_name[n]
                     # 替换变量值
+                    row_data["url"] = DoRegx().do_regx(row_data["url"])
                     row_data["data"] = DoRegx().do_regx(row_data["data"])
                     if eval(row_data["check_sql"]) != None:
                         row_data["check_sql"] = DoRegx().do_regx(row_data["check_sql"])
@@ -40,21 +43,27 @@ class ReadExcel:
                                            "ExpectedResult"]].to_dict()
                         row_data["sheet_name"] = sheet_name[n]
                         # 替换变量值
+                        row_data["url"] = DoRegx().do_regx(row_data["url"])
                         row_data["data"] = DoRegx().do_regx(row_data["data"])
                         if eval(row_data["check_sql"]) != None:
                             row_data["check_sql"] = DoRegx().do_regx(row_data["check_sql"])
                         data.append(row_data)
-            ReadExcel().update_excel(int(getattr(GetData, "tel")) + 1)  # 更新变量表
+            # 更新变量表
+            ReadExcel().update_excel(5, 1, getattr(GetData, "assert_name") + "1")
+            ReadExcel().update_excel(10, 1, getattr(GetData, "label_name") + "t")
+            ReadExcel().update_excel(12, 1, getattr(GetData, "label_editname") + "L")
+            ReadExcel().update_excel(15, 1, getattr(GetData, "poi_name") + "o")
+
         return data
 
-    def write_back(self, sheet_name, row, col,result):
+    def write_back(self, sheet_name, row, col, result):
         sheet = self.wb[sheet_name]
         sheet.cell(row=row, column=col).value = result
         self.wb.save(self.file_name)
 
-    def update_excel(self, var_value):
+    def update_excel(self, row, col, var_value):
         sheet = self.wb["init"]
-        sheet.cell(row=2, column=1).value = var_value
+        sheet.cell(row=row, column=col).value = var_value
         self.wb.save(self.file_name)
 
     @staticmethod
